@@ -62,6 +62,13 @@ function verifyProjectDir(path: string) {
   return true
 }
 
+function scaleContent(win: BrowserWindow) {
+  const { width } = APP_WINDOW_SIZE
+  const [actualWidth] = win.getSize()
+  const zoom = actualWidth / width
+  win.webContents.setZoomFactor(zoom)
+}
+
 interface Options {
   loadURL: LoadUrl
 }
@@ -69,6 +76,7 @@ interface Options {
 let appId: number
 const SETTINGS_KEY = 'versions_list'
 const COMPILE_DATA_KEY = 'compile_data'
+const APP_WINDOW_SIZE = { width: 1280, height: 800 }
 
 // Expose functions.
 export function setupCutomFuntions({ loadURL }: Options): void {
@@ -95,6 +103,7 @@ export function setupCutomFuntions({ loadURL }: Options): void {
       }
     })
     appId = appWindow.id
+    appWindow.setAspectRatio(1.6)
     mainWindowState.manage(appWindow)
     appWindow.on('ready-to-show', () => {
       appWindow.show()
@@ -108,6 +117,8 @@ export function setupCutomFuntions({ loadURL }: Options): void {
     appWindow.addListener('close', () => {
       mainWindow.webContents.send('custom-events-appState', { open: false })
     })
+    scaleContent(appWindow)
+    appWindow.addListener('resize', () => scaleContent(appWindow))
     return
   })
 
