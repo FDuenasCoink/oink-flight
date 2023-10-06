@@ -1,0 +1,29 @@
+name: Compile electron version
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-win:
+    runs-on: windows-2022
+    permissions:
+      packages: write
+      contents: write
+    env:
+      NODE_AUTH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - name: Setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.X
+
+      - name: Install global dependencies
+        run: npm ci
+
+      - name: compile
+        run: npm run build:win

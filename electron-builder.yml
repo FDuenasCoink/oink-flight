@@ -44,5 +44,7 @@ appImage:
   artifactName: ${name}-${version}.${ext}
 npmRebuild: false
 publish:
-  provider: generic
-  url: https://example.com/auto-updates
+  provider: github
+  url: https://github.com/FDuenasCoink/oink-flight.git
+  releaseType: release
+  private: false
