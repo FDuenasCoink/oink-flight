@@ -3,6 +3,7 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 import { RunVersion } from './pages/RunVersion'
 import { GenerateVersion } from './pages/GenerateVersion'
 import { Root } from './components/Root'
+import { VersionProvider } from './context'
 
 const router = createBrowserRouter([
   {
@@ -27,10 +28,10 @@ const router = createBrowserRouter([
 
 const App: React.FC = () => {
   return (
-    <div>
+    <VersionProvider>
       <Toaster richColors />
       <RouterProvider router={router} />
-    </div>
+    </VersionProvider>
   )
 }
 

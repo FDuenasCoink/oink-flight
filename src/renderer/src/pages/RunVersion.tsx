@@ -1,12 +1,13 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
 import { GenerateVersionButton, VersionResume, VersionUpload, Versions } from '@renderer/components'
+import { useVersions } from '@renderer/context'
 import { Version } from '@renderer/models/version.model'
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 export const RunVersion: React.FC = () => {
   const [version, setVersion] = useState<Version | null>()
-  const [versionList, setVersionList] = useState<Version[]>([])
+  const { versions, setVersions } = useVersions()
   const [isRunning, setIsRunning] = useState(false)
   const [parent] = useAutoAnimate()
 
@@ -59,7 +60,7 @@ export const RunVersion: React.FC = () => {
   const getVersionList = async () => {
     try {
       const versions = await window.api.getVersions()
-      setVersionList(versions)
+      setVersions(versions)
     } catch (error) {
       handleError(error)
     }
@@ -100,7 +101,7 @@ export const RunVersion: React.FC = () => {
       <section>
         <h3 className="text-gray-700 font-medium text-2xl mb-3">Recientes:</h3>
         <Versions>
-          {versionList.map((version) => (
+          {versions.map((version) => (
             <Versions.Item
               version={version}
               key={version.version}
