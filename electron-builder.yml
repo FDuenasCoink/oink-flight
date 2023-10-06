@@ -15,7 +15,6 @@ fileAssociations:
   ext: oink
   name: OINK
   description: aplicación para pruebas de super oink
-  icon:
 win:
   executableName: super-oink-tester
 nsis:

@@ -132,6 +132,7 @@ export function setupCutomFuntions({ loadURL }: Options): void {
 
   ipcMain.handle('custom-getVersions', async () => {
     const rawValue = await settings.get(SETTINGS_KEY)
+    if (!rawValue) return []
     const metadataList = await MetadataList.parseAsync(rawValue)
     const versions: TMetadata[] = []
     for (const version of Object.keys(metadataList)) {

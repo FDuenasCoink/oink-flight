@@ -1,6 +1,6 @@
 {
   "name": "super-oink-tester",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Aplication to generate and test super oink versións",
   "main": "./out/main/index.js",
   "author": "Fabian David Dueñas",
