@@ -4,6 +4,7 @@ import playIcon from '../assets/play_icon.png'
 import stopIcon from '../assets/stop_icon.png'
 import { format } from 'date-fns'
 import { useMemo } from 'react'
+import Markdown from 'react-markdown'
 
 const CloseIcon = () => {
   return (
@@ -71,7 +72,9 @@ export const VersionResume: React.FC<VersionResumeProps> = ({
       </div>
       {version.notes ? (
         <div className="px-5">
-          <p className="prose lg:prose-xl bg-gray-100 p-3 rounded-md">{version.notes}</p>
+          <p className="prose bg-gray-100 p-3 rounded-md">
+            <Markdown>{version.notes}</Markdown>
+          </p>
         </div>
       ) : null}
       <div className="pt-5 flex gap-4">
