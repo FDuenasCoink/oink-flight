@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: super-oink-tester
+appId: com.coink.oinkflight
+productName: OinkFlight
 directories:
   buildResources: build
 files:
@@ -11,6 +11,11 @@ files:
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
 asarUnpack:
   - resources/**
+fileAssociations:
+  ext: oink
+  name: OINK
+  description: aplicación para pruebas de super oink
+  icon:
 win:
   executableName: super-oink-tester
 nsis:
