@@ -5,6 +5,10 @@ import icon from '../../resources/icon.png?asset'
 import { setupCutomFuntions, superOinkDirectory } from './custom-funtions'
 import serve from 'electron-serve'
 
+const mainLoadURL = serve({
+  directory: join(__dirname, '../renderer/index.html')
+})
+
 function createWindow(): void {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
@@ -35,7 +39,8 @@ function createWindow(): void {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    // mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+    mainLoadURL(mainWindow)
   }
 }
 
