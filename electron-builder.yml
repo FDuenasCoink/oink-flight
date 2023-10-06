@@ -45,6 +45,4 @@ appImage:
 npmRebuild: false
 publish:
   provider: github
-  url: https://github.com/FDuenasCoink/oink-flight.git
   releaseType: release
-  private: false

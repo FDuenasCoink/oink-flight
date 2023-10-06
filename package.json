@@ -1,10 +1,14 @@
 {
   "name": "super-oink-tester",
   "version": "1.0.0",
-  "description": "An Electron application with React and TypeScript",
+  "description": "Aplication to generate and test super oink versións",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://www.electronjs.org",
+  "author": "Fabian David Dueñas",
+  "homepage": "https://github.com/FDuenasCoink/oink-flight.git",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FDuenasCoink/oink-flight.git"
+  },
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix",
