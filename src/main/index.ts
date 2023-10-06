@@ -6,7 +6,8 @@ import { setupCutomFuntions, superOinkDirectory } from './custom-funtions'
 import serve from 'electron-serve'
 
 const mainLoadURL = serve({
-  directory: join(__dirname, '../renderer/index.html')
+  directory: join(__dirname, '../renderer'),
+  scheme: 'main'
 })
 
 function createWindow(): void {
