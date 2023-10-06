@@ -71,7 +71,7 @@ export const VersionResume: React.FC<VersionResumeProps> = ({
       </div>
       {version.notes ? (
         <div className="px-5">
-          <p className="text-sm text-gray-800 bg-gray-100 p-3 rounded-md">{version.notes}</p>
+          <p className="prose lg:prose-xl bg-gray-100 p-3 rounded-md">{version.notes}</p>
         </div>
       ) : null}
       <div className="pt-5 flex gap-4">

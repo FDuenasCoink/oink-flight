@@ -1,5 +1,6 @@
-import { Input, TextArea } from '@renderer/components'
+import { Input, Loader, TextArea } from '@renderer/components'
 import { useFormik } from 'formik'
+import { useState } from 'react'
 import { GoFileDirectory } from 'react-icons/go'
 import { PatternFormat } from 'react-number-format'
 import { useLoaderData } from 'react-router-dom'
@@ -12,6 +13,7 @@ interface DefaultData {
 }
 
 export const GenerateVersion: React.FC = () => {
+  const [loading, setLoading] = useState(false)
   const { data } = useLoaderData() as { data?: DefaultData }
   const formik = useFormik({
     initialValues: {
@@ -23,18 +25,22 @@ export const GenerateVersion: React.FC = () => {
     },
     onSubmit: async (data, actions) => {
       try {
+        setLoading(true)
         const { path } = await window.api.compileVersion(data)
         actions.resetForm()
+        setLoading(false)
         toast.success(`Version ${data.version} generada correctamente!`, {
           description: `Puedes encontrar la versión en ${path}`
         })
       } catch {
+        setLoading(false)
         toast.error('Algo salio mal', {
           description: 'no se pudo generar la versión correctamente'
         })
       }
     }
   })
+
   const selectDirectory = async () => {
     const result = await window.api.selectDirectory()
     if (!result.filePaths.length) return
@@ -50,6 +56,7 @@ export const GenerateVersion: React.FC = () => {
 
   return (
     <div className="bg-white p-6 rounded-lg">
+      <Loader message="Compilando versión..." isOpen={loading} />
       <h3 className="text-center font-bold text-3xl mb-6 text-gray-800">Nueva versión</h3>
       <form onSubmit={formik.handleSubmit} className=" space-y-5">
         <div className="flex items-end gap-2">

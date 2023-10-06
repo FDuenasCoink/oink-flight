@@ -1,5 +1,11 @@
 import { useAutoAnimate } from '@formkit/auto-animate/react'
-import { GenerateVersionButton, VersionResume, VersionUpload, Versions } from '@renderer/components'
+import {
+  GenerateVersionButton,
+  Loader,
+  VersionResume,
+  VersionUpload,
+  Versions
+} from '@renderer/components'
 import { useVersions } from '@renderer/context'
 import { Version } from '@renderer/models/version.model'
 import { useEffect, useState } from 'react'
@@ -8,6 +14,7 @@ import { toast } from 'sonner'
 export const RunVersion: React.FC = () => {
   const [version, setVersion] = useState<Version | null>()
   const { versions, setVersions } = useVersions()
+  const [loading, setLoading] = useState(false)
   const [isRunning, setIsRunning] = useState(false)
   const [parent] = useAutoAnimate()
 
@@ -44,11 +51,14 @@ export const RunVersion: React.FC = () => {
 
   const handleRun = async (version: Version) => {
     try {
+      setLoading(true)
       const appLocation = version.location
       await window.api.loadApp(appLocation)
       await window.api.setVersion(version)
       await getVersionList()
+      setLoading(false)
     } catch (error) {
+      setLoading(false)
       handleError(error)
     }
   }
@@ -84,6 +94,7 @@ export const RunVersion: React.FC = () => {
 
   return (
     <div>
+      <Loader isOpen={loading} />
       <GenerateVersionButton />
       <section ref={parent} className="mb-10">
         {version ? (

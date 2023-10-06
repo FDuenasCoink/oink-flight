@@ -78,7 +78,7 @@ export function setupCutomFuntions({ loadURL }: Options): void {
     await loadAppFiles(appLocation)
     const mainWindowState = windowStateKeeper({
       defaultWidth: 1280,
-      defaultHeight: 800
+      defaultHeight: 828
     })
     const appWindow = new BrowserWindow({
       x: mainWindowState.x,

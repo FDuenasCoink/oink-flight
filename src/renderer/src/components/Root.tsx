@@ -12,7 +12,7 @@ export const Root: React.FC = () => {
   const canGoBack = location.key !== 'default'
 
   return (
-    <div className="bg-gray-100 min-h-screen px-10 py-10 pb-24">
+    <div className="bg-gray-100 min-h-screen px-10 pt-6 pb-24">
       <header className="mb-12">
         {canGoBack ? (
           <button
@@ -25,7 +25,7 @@ export const Root: React.FC = () => {
           <div className="h-12"></div>
         )}
         <div className="text-5xl font-extrabold">
-          <h1 className="bg-clip-text text-transparent bg-gradient-to-r p-1 from-lime-500 to-lime-600 text-center">
+          <h1 className="bg-clip-text text-transparent bg-gradient-to-r p-2 from-lime-500 to-lime-600 text-center">
             OinkFlight
           </h1>
         </div>
