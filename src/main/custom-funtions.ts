@@ -13,6 +13,10 @@ import { CompileData, Metadata, MetadataList, TMetadata } from './metadata.schem
 
 export const superOinkDirectory = join(app.getPath('temp'), 'super-oink-test')
 
+const SETTINGS_KEY = 'versions_list'
+const COMPILE_DATA_KEY = 'compile_data'
+const APP_WINDOW_SIZE = { width: 1280, height: 800 }
+
 const exec = promisify(execFn)
 
 async function getAppInfo(location: string) {
@@ -34,9 +38,9 @@ async function loadAppFiles(location: string) {
   const www = zip.getEntry('www/')
   if (!metadataEntry || !www) throw new Error('invalid file')
   const metadata = JSON.parse(metadataEntry.getData().toString('utf8'))
-  await Metadata.parseAsync({ ...metadata, location })
   await rimraf(superOinkDirectory)
   zip.extractEntryTo(www.entryName, superOinkDirectory, true, true)
+  return await Metadata.parseAsync({ ...metadata, location })
 }
 
 function verifyProjectDir(path: string) {
@@ -69,24 +73,17 @@ function scaleContent(win: BrowserWindow) {
   win.webContents.setZoomFactor(zoom)
 }
 
-interface Options {
-  loadURL: LoadUrl
-}
-
 let appId: number
-const SETTINGS_KEY = 'versions_list'
-const COMPILE_DATA_KEY = 'compile_data'
-const APP_WINDOW_SIZE = { width: 1280, height: 800 }
 
 // Expose functions.
-export function setupCutomFuntions({ loadURL }: Options): void {
+export function setupCutomFuntions({ loadURL }: { loadURL: LoadUrl }): void {
   setupSuperOinkFuntions()
 
   ipcMain.handle('custom-loadApp', async (_event, appLocation: string) => {
-    await loadAppFiles(appLocation)
+    const { version, name } = await loadAppFiles(appLocation)
     const mainWindowState = windowStateKeeper({
-      defaultWidth: 1280,
-      defaultHeight: 828
+      defaultWidth: APP_WINDOW_SIZE.width,
+      defaultHeight: APP_WINDOW_SIZE.height
     })
     const appWindow = new BrowserWindow({
       x: mainWindowState.x,
@@ -103,12 +100,14 @@ export function setupCutomFuntions({ loadURL }: Options): void {
       }
     })
     appId = appWindow.id
-    appWindow.setAspectRatio(1.6)
+    appWindow.setAspectRatio(APP_WINDOW_SIZE.width / APP_WINDOW_SIZE.height)
     mainWindowState.manage(appWindow)
     appWindow.on('ready-to-show', () => {
       appWindow.show()
+      appWindow.setTitle(`${name} v${version}`)
+      scaleContent(appWindow)
+      setTimeout(() => appWindow.webContents.openDevTools({ mode: 'detach' }), 500)
     })
-    appWindow.webContents.openDevTools({ mode: 'undocked' })
     await loadURL(appWindow)
     const windows = BrowserWindow.getAllWindows()
     const mainWindow = windows.find((w) => w !== appWindow)
@@ -117,7 +116,6 @@ export function setupCutomFuntions({ loadURL }: Options): void {
     appWindow.addListener('close', () => {
       mainWindow.webContents.send('custom-events-appState', { open: false })
     })
-    scaleContent(appWindow)
     appWindow.addListener('resize', () => scaleContent(appWindow))
     return
   })
