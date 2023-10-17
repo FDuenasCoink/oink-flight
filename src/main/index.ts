@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { setupCutomFuntions, superOinkDirectory } from './custom-funtions'
 import serve from 'electron-serve'
+import { autoUpdater } from 'electron-updater'
 
 const mainLoadURL = serve({
   directory: join(__dirname, '../renderer'),
@@ -70,6 +71,8 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
+
+  autoUpdater.checkForUpdatesAndNotify()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

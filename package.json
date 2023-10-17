@@ -1,6 +1,6 @@
 {
   "name": "super-oink-tester",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Aplication to generate and test super oink versións",
   "main": "./out/main/index.js",
   "author": "Fabian David Dueñas",
@@ -35,6 +35,7 @@
     "date-fns": "^2.30.0",
     "electron-serve": "^1.1.0",
     "electron-settings": "^4.0.2",
+    "electron-updater": "^6.1.4",
     "electron-window-state": "^5.0.3",
     "formik": "^2.4.5",
     "localforage": "^1.10.0",

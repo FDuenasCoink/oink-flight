@@ -100,7 +100,17 @@ export function setupCutomFuntions({ loadURL }: { loadURL: LoadUrl }): void {
       }
     })
     appId = appWindow.id
-    appWindow.setAspectRatio(APP_WINDOW_SIZE.width / APP_WINDOW_SIZE.height)
+    let statusBarHeight = 0
+    if (process.platform === 'win32') {
+      const height = appWindow.getSize()[1]
+      const contentHeight = appWindow.getContentSize()[1]
+      statusBarHeight = Math.abs(height - contentHeight)
+    }
+    console.log({ statusBarHeight })
+    appWindow.setAspectRatio(APP_WINDOW_SIZE.width / (APP_WINDOW_SIZE.height + statusBarHeight), {
+      height: -statusBarHeight,
+      width: 0
+    })
     mainWindowState.manage(appWindow)
     appWindow.on('ready-to-show', () => {
       appWindow.show()
@@ -110,7 +120,7 @@ export function setupCutomFuntions({ loadURL }: { loadURL: LoadUrl }): void {
     })
     await loadURL(appWindow)
     const windows = BrowserWindow.getAllWindows()
-    const mainWindow = windows.find((w) => w !== appWindow)
+    const mainWindow = windows.find((w) => w.id !== appId)
     if (!mainWindow) return
     mainWindow.webContents.send('custom-events-appState', { open: true })
     appWindow.addListener('close', () => {
