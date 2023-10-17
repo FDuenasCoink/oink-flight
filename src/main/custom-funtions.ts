@@ -1,5 +1,4 @@
 import { BrowserWindow, app, dialog, ipcMain } from 'electron'
-import { loadURL as LoadUrl } from 'electron-serve'
 import { join } from 'node:path'
 import * as fs from 'node:fs'
 import { promisify } from 'node:util'
@@ -76,7 +75,7 @@ function scaleContent(win: BrowserWindow) {
 let appId: number
 
 // Expose functions.
-export function setupCutomFuntions({ loadURL }: { loadURL: LoadUrl }): void {
+export function setupCutomFuntions(): void {
   setupSuperOinkFuntions()
 
   ipcMain.handle('custom-loadApp', async (_event, appLocation: string) => {
@@ -106,19 +105,16 @@ export function setupCutomFuntions({ loadURL }: { loadURL: LoadUrl }): void {
       const contentHeight = appWindow.getContentSize()[1]
       statusBarHeight = Math.abs(height - contentHeight)
     }
-    console.log({ statusBarHeight })
-    appWindow.setAspectRatio(APP_WINDOW_SIZE.width / (APP_WINDOW_SIZE.height + statusBarHeight), {
-      height: -statusBarHeight,
-      width: 0
-    })
     mainWindowState.manage(appWindow)
     appWindow.on('ready-to-show', () => {
+      appWindow.setAspectRatio(APP_WINDOW_SIZE.width / (APP_WINDOW_SIZE.height + statusBarHeight))
       appWindow.show()
       appWindow.setTitle(`${name} v${version}`)
       scaleContent(appWindow)
       setTimeout(() => appWindow.webContents.openDevTools({ mode: 'detach' }), 500)
     })
-    await loadURL(appWindow)
+    // await loadURL(appWindow)
+    await appWindow.loadURL('app://app')
     const windows = BrowserWindow.getAllWindows()
     const mainWindow = windows.find((w) => w.id !== appId)
     if (!mainWindow) return
